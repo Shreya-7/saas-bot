@@ -3,6 +3,7 @@ const { isMessageTodoDone, DONE_EMOJI } = require("../utils.js");
 
 module.exports = {
     name: "Returns a random link out of all (not reacted with ${DONE_EMOJI}) todo links from all educational channels",
+    frequency: "00 30 9 * * *",
     async execute(client, numOfLinks) {
         console.log("Running the universal-todo task");
         const educationalCategoryIds = [
