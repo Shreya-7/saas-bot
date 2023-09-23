@@ -1,12 +1,13 @@
-const fs = require('node:fs')
-const path = require('node:path')
+const cron = require('cron');
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 const { token } = require('./config.json');
+const { fetchFilesFromPath } = require('./utils');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent] });
 
 client.once(Events.ClientReady, c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
+    fireScheduledTasks();
 });
 client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
@@ -34,15 +35,23 @@ client.login(token);
 
 client.commands = new Collection();
 
-const commandPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandPath).filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-    const filePath = path.join(commandPath, file);
-    const command = require(filePath);
+fetchFilesFromPath('commands').forEach(command => {
     // Set a new item in the Collection with the key as the command name and the value as the exported module
     if ('data' in command && 'execute' in command) {
         client.commands.set(command.data.name, command);
     } else {
-        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+        console.log(`[WARNING] The command is missing a required "data" or "execute" property.`);
     }
+})
+
+function fireScheduledTasks() {
+    fetchFilesFromPath('tasks').forEach(scheduledTask => {
+        if ('name' in scheduledTask && 'execute' in scheduledTask && 'frequency' in scheduledTask) {
+            let schedule = new cron.CronJob(scheduledTask.frequency, () => { scheduledTask.execute(client) });
+            console.log(`Scheduling task="${scheduledTask.name}" which ${scheduledTask.description} at frequency ${scheduledTask.frequency}`);
+            schedule.start();
+        } else {
+            console.log(`[WARNING] The task is missing a required "name" or "execute" or "frequency" property.`);
+        }
+    })
 }
