@@ -2,9 +2,10 @@ const { EmbedBuilder } = require("discord.js");
 const { isMessageTodoDone, DONE_EMOJI } = require("../utils.js");
 
 module.exports = {
-    name: "Returns a random link out of all (not reacted with ${DONE_EMOJI}) todo links from all educational channels",
+    name: "Universal Todos",
+    description: `returns a random link out of all (not reacted with ${DONE_EMOJI}) todo links from all educational channels`,
     frequency: "00 30 9 * * *",
-    async execute(client, numOfLinks) {
+    async execute(client) {
         console.log("Running the universal-todo task");
         const educationalCategoryIds = [
             "1059435054092259459",
