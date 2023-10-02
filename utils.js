@@ -23,4 +23,8 @@ function fetchFilesFromPath(folderName) {
     return items;
 }
 
-module.exports = { isMessageTodoDone, fetchFilesFromPath, DONE_EMOJI };
+function linkPresentInMessage(message) {
+    return message.content.includes('http');
+}
+
+module.exports = { isMessageTodoDone, fetchFilesFromPath, linkPresentInMessage, DONE_EMOJI };
