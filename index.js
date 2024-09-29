@@ -11,11 +11,16 @@ client.once(Events.ClientReady, c => {
 });
 client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
-    console.log(interaction);
+    console.log(`Fired interaction=${interaction.id} commandName=${interaction.commandName}`);
 
     const command = interaction.client.commands.get(interaction.commandName);
     if (!command) {
         console.error(`No command matching ${interaction.commandName} found!`);
+        return;
+    }
+    if (interaction.replied || interaction.deferred) {
+        console.warn(`interaction=${interaction.id} already in progress, 
+            replied=${interaction.replied} deferred=${interaction.deferred}`);
         return;
     }
     try {
