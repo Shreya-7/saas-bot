@@ -3,7 +3,7 @@ const { UniversalTodos } = require("../actions/universal-todos.js");
 module.exports = {
     name: UniversalTodos.name,
     description: UniversalTodos.description,
-    frequency: "00 18 * * *",
+    frequency: "00 03 * * *",
     async execute(client) {
         console.log("Running the universal-todo task");
         const embed = await UniversalTodos.execute(client);
