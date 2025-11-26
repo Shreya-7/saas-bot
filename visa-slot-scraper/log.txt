@@ -1,7 +1,0 @@
-2025-11-06 20:43:03 WARN Selenium [DEPRECATION] [:browser_options] :options as a parameter for driver initialization is deprecated. Use :capabilities with an Array of value capabilities/options if necessary instead.
-Running Visa slot tracker - 2025-11-06 20:43:04 +0530
-Found B1 Visa slot data
-Parsing successful, checking mismatches
-No changes in slots
-Completed
-**************************************************
